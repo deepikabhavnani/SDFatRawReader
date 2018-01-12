@@ -14,6 +14,7 @@ def print_boot_sector():
     print "RootDirStartSector = %d" %common.RootDirStartSector
     print "ClustersInUserArea = %d" %common.ClusterCount
     print "DataAreaStartSector = %d" %common.DataAreaStartSector
+    print "FatType = %d" % common.FatType
 
 def decode_boot_sector():
     common.read_blocks_print(0,1,0)
@@ -58,13 +59,17 @@ def decode_boot_sector():
     # and dividing, rounding down, by the number of sectors in a cluster
     common.ClusterCount = (common.TotalSectors - common.DataAreaStartSector) / common.NumSecPerCluster
     if common.ClusterCount < 4085:
-        common.FatOffset = 1.5
+        common.FatType = 1
         print "FAT12"
     elif common.ClusterCount < 65525:
-        common.FatOffset = 2
+        common.FatType = 2
         print "FAT16"
     else:
-        common.FatOffset = 4
+        common.FatType = 3
         print "FAT32"
     if common.ClusterCount > 268435445:
         print  "Error: cluster count cannot exceeed 268435445"
+        sys.exit()
+
+def read_boot_sector():
+    common.read_blocks_print(0,1,1)

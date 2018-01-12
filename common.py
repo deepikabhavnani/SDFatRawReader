@@ -1,4 +1,4 @@
-drive = r"\\.\E:"
+Drive = r"\\.\E:"
 Blocksize = 512
 Block_buf = ""
 ClusterCount = 0
@@ -11,7 +11,8 @@ ResvSectors = 0
 FATStartSector = 0
 RootDirStartSector = 0
 DataAreaStartSector = 0
-FatOffset = 0
+#FatType - 1 FAT12, 2 - FAT16, 3 - FAT32
+FatType = 0
 HexPrint = 1
 
 
@@ -46,7 +47,7 @@ def read_blocks_print(physical_num, count, ifprint):
 
 def read_block(physical_num):
     global Block_buf
-    disk = file(drive,'rb')
+    disk = file(Drive,'rb')
     disk.seek(physical_num*Blocksize)
     Block_buf = disk.read(Blocksize)
     disk.close()
